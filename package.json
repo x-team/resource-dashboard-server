@@ -1,0 +1,40 @@
+{
+  "name": "resource-dashboard-server",
+  "version": "0.0.0",
+  "description": "Small description for resource-dashboard-server goes here",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/index.js | tap-spec",
+    "coverage": "rm -rf coverage && istanbul cover -- tape test/index.js --verbose",
+    "lint": "eslint .",
+    "validate": "npm ls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/x-team/resource-dashboard-server.git"
+  },
+  "author": "Kamil Ogórek <kamil.ogorek@x-team.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/x-team/resource-dashboard-server/issues"
+  },
+  "homepage": "https://github.com/x-team/resource-dashboard-server#readme",
+  "dependencies": {
+    "hapi": "^11.1.2"
+  },
+  "pre-commit": [
+    "lint",
+    "validate",
+    "test"
+  ],
+  "devDependencies": {
+    "eslint": "^1.10.2",
+    "istanbul": "^0.4.1",
+    "precommit-hook": "^3.0.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.2.2"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  }
+}

@@ -1,0 +1,9 @@
+// TODO: Define rules http://eslint.org/docs/rules/
+{
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+  }
+}
