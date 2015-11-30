@@ -4,6 +4,7 @@
   "description": "Small description for resource-dashboard-server goes here",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon index.js",
     "test": "tape test/index.js | tap-spec",
     "coverage": "rm -rf coverage && istanbul cover -- tape test/index.js --verbose",
     "lint": "eslint .",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "eslint": "^1.10.2",
     "istanbul": "^0.4.1",
+    "nodemon": "^1.8.1",
     "precommit-hook": "^3.0.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.2.2"

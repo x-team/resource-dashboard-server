@@ -17,7 +17,8 @@ You will need the following things properly installed on your computer.
 
 ## Running / Development
 
-* `node index.js`
+* `node index.js` # Run static server or
+* `node run dev` # Run watch server
 * Visit your app at [http://localhost:8000](http://localhost:8000).
 
 ### Running Tools
