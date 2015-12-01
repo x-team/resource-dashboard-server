@@ -1,3 +1,7 @@
+'use strict';
+
+// NOTE: Those are just random tests to show how to test modules
+
 const test = require('tape');
 const adder = require('../adder');
 
