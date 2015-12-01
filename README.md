@@ -8,6 +8,7 @@ A short introduction of this app could easily go here.
 You will need the following things properly installed on your computer.
 
 * [Node.js](http://nodejs.org/) (with NPM)
+* [MongoDB](https://www.mongodb.org/)
 
 ## Installation
 
@@ -17,6 +18,7 @@ You will need the following things properly installed on your computer.
 
 ## Running / Development
 
+* `mongod` # Run MongoDB
 * `node index.js` # Run static server or
 * `node run dev` # Run watch server
 * Visit your app at [http://localhost:8000](http://localhost:8000).

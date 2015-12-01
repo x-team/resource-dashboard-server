@@ -1,27 +1,44 @@
-'use strict';
-
 const Hapi = require('hapi');
+const mongoose = require('mongoose');
+const config = require('./config');
 
-// Create a server with a host and port
 const server = new Hapi.Server();
+
 server.connection({
-    host: 'localhost',
-    port: 8000
+    host: config.server.host,
+    port: config.server.port
 });
 
-// Add the route
 server.route({
     method: 'GET',
-    path:'/hello',
+    path: '/developers',
     handler(request, reply) {
-        return reply('hello world');
+        return reply(Developer.find());
     }
 });
 
-// Start the server
-server.start((err) => {
-    if (err) {
-        throw err;
+const Developer = require('./models/developer');
+const names = ['Kamil', 'Krystian', 'Andrzej', 'Błażej', 'Roksana'];
+server.route({
+    method: 'POST',
+    path: '/developers',
+    handler(request, reply) {
+        Developer.create({ name: names[Math.floor(Math.random() * names.length)] }, (err) => {
+          if (err) {
+              return reply(new Error(err));
+          }
+          return reply('New developer has been added');
+        });
     }
-    console.log('Server running at:', server.info.uri);
+});
+
+mongoose.connect(config.database.uri);
+mongoose.connection.on('error', console.error.bind(console, 'DB connection error:'));
+mongoose.connection.once('open', () => {
+    server.start((err) => {
+        if (err) {
+            throw err;
+        }
+        console.log('Server running at:', server.info.uri);
+    });
 });

@@ -1,0 +1,10 @@
+{
+    "server": {
+        "host": "localhost",
+        "port": 8000,
+        "endpoint": "/api"
+    },
+    "database": {
+        "uri": "mongodb://localhost/resource-dashboard-dev"
+    }
+}
