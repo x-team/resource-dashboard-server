@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/x-team/resource-dashboard-server#readme",
   "dependencies": {
+    "glob": "^6.0.1",
     "hapi": "^11.1.2",
     "kerberos": "0.0.17",
     "mongodb": "^2.0.49",

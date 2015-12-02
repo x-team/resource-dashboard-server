@@ -5,13 +5,14 @@ const mongoose = require('mongoose');
 const config = require('./config');
 
 const server = new Hapi.Server();
+const router = require('./router');
 
 server.connection({
     host: config.server.host,
     port: config.server.port
 });
 
-require('./router')(server);
+router(server);
 
 mongoose.connect(config.database.uri);
 mongoose.connection.on('error', console.error.bind(console, 'DB connection error:'));
