@@ -3,6 +3,8 @@
 This README outlines the details of collaborating on this Node application.
 A short introduction of this app could easily go here.
 
+This project uses [JSON API](http://jsonapi.org) as a transport standard, so make sure that all requests are handled in an appropriate manner.
+
 ## Prerequisites
 
 You will need the following things properly installed on your computer.
