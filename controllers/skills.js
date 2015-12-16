@@ -9,11 +9,11 @@ module.exports = {
   show(request, reply) {},
   create(request, reply) {
       let name = request.payload.name;
-      let tags = request.payload.tags;
+      let tags = typeof request.payload.tags === 'string' ? request.payload.tags.split(',') : [];
 
       Skill.create({
           name: name,
-          tags: typeof tags === 'string' ? tags.split(',') : []
+          tags: tags
       }, (err, skill) => {
           if (err) {
               return reply(new Error(err));

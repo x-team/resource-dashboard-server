@@ -11,7 +11,7 @@ const DeveloperSchema = new Schema({
 });
 
 Object.assign(DeveloperSchema.methods, {
-    fetchGeocode(address) {
+    fetchGeocode(address = '') {
         return new Promise((resolve, reject) => {
             request.get({
                 url: 'https://maps.googleapis.com/maps/api/geocode/json',
@@ -33,7 +33,7 @@ Object.assign(DeveloperSchema.methods, {
         });
     },
 
-    fetchTimezone(geocode) {
+    fetchTimezone(geocode = {}) {
         return new Promise((resolve, reject) => {
             request.get({
                 url: 'https://maps.googleapis.com/maps/api/timezone/json',
