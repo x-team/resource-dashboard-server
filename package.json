@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "tape test/index.js | tap-spec",
+    "test": "tape test/**/*.js | tap-spec",
     "coverage": "rm -rf coverage && istanbul cover -- tape test/index.js --verbose",
     "lint": "eslint .",
     "validate": "npm ls",
@@ -26,7 +26,8 @@
     "hapi": "^11.1.2",
     "kerberos": "0.0.17",
     "mongodb": "^2.0.49",
-    "mongoose": "^4.2.8"
+    "mongoose": "^4.2.8",
+    "request": "^2.67.0"
   },
   "pre-commit": [
     "lint",
