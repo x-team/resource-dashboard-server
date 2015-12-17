@@ -5,13 +5,10 @@ const Schema = mongoose.Schema;
 const SkillSchema = require('./skill').Schema;
 
 const OpportunitySchema = new Schema({
-    name: {
-      type: String,
-      required: true
-    },
     dateFrom: Date,
     dateTo: Date,
-    tags: [SkillSchema]
+    name: String,
+    skills: [SkillSchema]
 });
 
 module.exports = mongoose.model('Opportunity', OpportunitySchema);
