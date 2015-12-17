@@ -19,16 +19,11 @@ module.exports = {
     },
 
     create(request, reply) {
-        let name = request.payload.name;
-        let dateFrom = request.payload.dateFrom;
-        let dateTo = request.payload.dateTo;
-        let skills = request.payload.skills;
-
         Opportunity.create({
-            name: name,
-            dateFrom: dateFrom,
-            dateTo: dateTo,
-            skills: skills
+            name: request.payload.name,
+            dateFrom: request.payload.dateFrom,
+            dateTo: request.payload.dateTo,
+            skills: request.payload.skills
         }, (err, opportunity) => {
             if (err) {
                 return reply(new Error(err));
