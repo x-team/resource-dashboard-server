@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const timestamps = require('mongoose-timestamp');
 
 const OpportunitySchema = new Schema({
     dateFrom: Date,
@@ -9,5 +10,8 @@ const OpportunitySchema = new Schema({
     name: String,
     skills: Array
 });
+
+//add createdAt, updatedAt
+OpportunitySchema.plugin(timestamps);
 
 module.exports = mongoose.model('Opportunity', OpportunitySchema);
