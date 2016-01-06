@@ -5,31 +5,31 @@ const developersController = require('../controllers/developers');
 module.exports = (server) => {
     server.route({
         method: 'GET',
-        path: '/developers',
+        path: '/api/developers',
         handler: developersController.index
     });
 
     server.route({
         method: 'GET',
-        path: '/developers/{id}',
+        path: '/api/developers/{id}',
         handler: developersController.show
     });
 
     server.route({
         method: 'POST',
-        path: '/developers',
+        path: '/api/developers',
         handler: developersController.create
     });
 
     server.route({
-        method: 'PUT',
+        method: 'PATCH',
         path: '/developers/{id}',
         handler: developersController.update
     });
 
     server.route({
         method: 'DELETE',
-        path: '/developers/{id}',
+        path: '/api/developers/{id}',
         handler: developersController.destroy
     });
 };

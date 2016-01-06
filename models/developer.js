@@ -3,7 +3,6 @@
 const request = require('request');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const SkillSchema = require('./skill').Schema;
 
 const DeveloperSchema = new Schema({
     available: Boolean,
@@ -19,7 +18,7 @@ const DeveloperSchema = new Schema({
     location: String,
     timezone: String,
     rate: String,
-    skills: [SkillSchema]
+    skills: Array
 });
 
 Object.assign(DeveloperSchema.methods, {
