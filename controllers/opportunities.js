@@ -38,7 +38,7 @@ module.exports = {
             skills: data.skills
         }, (err, opportunity) => {
             if (err) {
-                return reply(new Error(err));
+                return reply({errors: err.errors}).code(400);
             }
             let result = jsonApi.mongoosetoJsonApiObject(opportunity, 'opportunity')
             return reply({data: result});
@@ -51,7 +51,7 @@ module.exports = {
 
         Opportunity.findById(id, (err, opportunity) => {
             if (err) {
-                return reply(new Error(err));
+                return reply(err).code(400);
             }
             Object.assign(opportunity, {
                 name: data.name,
@@ -60,9 +60,9 @@ module.exports = {
                 skills: data.skills
             });
 
-            opportunity.save((err, opportunity) => {
-                if (err) {
-                    return reply(new Error(err));
+            opportunity.save((saveError, opportunity) => {
+                if (saveError) {
+                    return reply({errors: saveError.errors}).code(400);
                 }
                 let result = jsonApi.mongoosetoJsonApiObject(opportunity, 'opportunity');
                 return reply({data: result});
