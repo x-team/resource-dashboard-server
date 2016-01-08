@@ -2,22 +2,22 @@
 
 const developersController = require('../controllers/developers');
 
-module.exports = (server) => {
+module.exports.register = function(server, options, next) {
     server.route({
         method: 'GET',
-        path: '/api/developers',
+        path: '/developers',
         handler: developersController.index
     });
 
     server.route({
         method: 'GET',
-        path: '/api/developers/{id}',
+        path: '/developers/{id}',
         handler: developersController.show
     });
 
     server.route({
         method: 'POST',
-        path: '/api/developers',
+        path: '/developers',
         handler: developersController.create
     });
 
@@ -29,7 +29,13 @@ module.exports = (server) => {
 
     server.route({
         method: 'DELETE',
-        path: '/api/developers/{id}',
+        path: '/developers/{id}',
         handler: developersController.destroy
     });
+    next();
+};
+
+module.exports.register.attributes = {
+    name: 'developers',
+    version: '0.0.0'
 };

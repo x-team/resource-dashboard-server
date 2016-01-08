@@ -11,7 +11,7 @@ const OpportunitySchema = new Schema({
     },
     dateFrom: {
         type: Date,
-        validate: [dateValidator, 'Date to must be greater than Date from']
+        validate: [earlierThanDateTo, 'Date to must be greater than Date from']
     },
     dateTo: Date,
     skills: Array
@@ -20,7 +20,7 @@ const OpportunitySchema = new Schema({
 //add createdAt, updatedAt
 OpportunitySchema.plugin(timestamps);
 
-function dateValidator(value) {
+function earlierThanDateTo(value) {
     if(value && this.dateTo && value > this.dateTo) {
         return false;
     }

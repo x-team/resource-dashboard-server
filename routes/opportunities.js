@@ -2,34 +2,41 @@
 
 const opportunitiesController = require('../controllers/opportunities');
 
-module.exports = (server) => {
+module.exports.register = function(server, options, next) {
+
     server.route({
         method: 'GET',
-        path: '/api/opportunities',
+        path: '/opportunities',
         handler: opportunitiesController.index
     });
 
     server.route({
         method: 'GET',
-        path: '/api/opportunities/{id}',
+        path: '/opportunities/{id}',
         handler: opportunitiesController.show
     });
 
     server.route({
         method: 'POST',
-        path: '/api/opportunities',
+        path: '/opportunities',
         handler: opportunitiesController.create
     });
 
     server.route({
         method: 'PATCH',
-        path: '/api/opportunities/{id}',
+        path: '/opportunities/{id}',
         handler: opportunitiesController.update
     });
 
     server.route({
         method: 'DELETE',
-        path: '/api/opportunities/{id}',
+        path: '/opportunities/{id}',
         handler: opportunitiesController.destroy
     });
+    next();
+};
+
+module.exports.register.attributes = {
+    name: 'opportunities',
+    version: '0.0.0'
 };

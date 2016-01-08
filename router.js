@@ -8,6 +8,8 @@ module.exports = (server) => {
     }).map(require);
 
     routes.forEach(function(route) {
-        route(server);
+        server.register({register: route}, {
+            routes: { prefix: '/api'}
+        }, ()=>{});
     });
 }
