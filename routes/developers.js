@@ -2,7 +2,7 @@
 
 const developersController = require('../controllers/developers');
 
-module.exports = (server) => {
+module.exports.register = function(server, options, next) {
     server.route({
         method: 'GET',
         path: '/developers',
@@ -22,7 +22,7 @@ module.exports = (server) => {
     });
 
     server.route({
-        method: 'PUT',
+        method: 'PATCH',
         path: '/developers/{id}',
         handler: developersController.update
     });
@@ -32,4 +32,10 @@ module.exports = (server) => {
         path: '/developers/{id}',
         handler: developersController.destroy
     });
+    next();
+};
+
+module.exports.register.attributes = {
+    name: 'developers',
+    version: '0.0.0'
 };

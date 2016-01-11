@@ -8,6 +8,13 @@ module.exports = (server) => {
     }).map(require);
 
     routes.forEach(function(route) {
-        route(server);
+        server.register({register: route}, {
+            routes: { prefix: '/api'}
+        }, (err)=>{
+            if(err) {
+                //TODO: log when we have a logging system
+                console.error('Failed to init internal routes: ', err);
+            }
+        });
     });
 }

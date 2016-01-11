@@ -1,10 +1,21 @@
 'use strict';
 
+const jsonApi = require('../helpers/jsonApi.js');
 const Opportunity = require('../models/opportunity');
 
 module.exports = {
     index(request, reply) {
-        return reply(Opportunity.find());
+        Opportunity.find({}, (err, opportunities) => {
+            if(err) {
+                return reply(new Error(err));
+            }
+
+            opportunities = opportunities.map((opportunity) => {
+                return jsonApi.mongoosetoJsonApiObject(opportunity, 'opportunity')
+            });
+
+            reply({data: opportunities});
+        });
     },
 
     show(request, reply) {
@@ -19,39 +30,42 @@ module.exports = {
     },
 
     create(request, reply) {
+        let data = request.payload.data.attributes;
         Opportunity.create({
-            name: request.payload.name,
-            dateFrom: request.payload.dateFrom,
-            dateTo: request.payload.dateTo,
-            skills: request.payload.skills
+            name: data.name,
+            dateFrom: data.dateFrom,
+            dateTo: data.dateTo,
+            skills: data.skills
         }, (err, opportunity) => {
             if (err) {
-                return reply(new Error(err));
+                return reply({errors: err.errors}).code(400);
             }
-            return reply(opportunity);
+            let result = jsonApi.mongoosetoJsonApiObject(opportunity, 'opportunity')
+            return reply({data: result});
         });
     },
 
     update(request, reply) {
         let id = encodeURIComponent(request.params.id);
+        let data = request.payload.data.attributes;
 
         Opportunity.findById(id, (err, opportunity) => {
             if (err) {
-                return reply(new Error(err));
+                return reply(err).code(400);
             }
-
             Object.assign(opportunity, {
-                name: request.payload.name,
-                dateFrom: request.payload.dateFrom,
-                dateTo: request.payload.dateTo,
-                skills: request.payload.skills
+                name: data.name,
+                dateFrom: data['date-from'],
+                dateTo: data['date-to'],
+                skills: data.skills
             });
 
-            opportunity.save((err, opportunity) => {
-                if (err) {
-                    return reply(new Error(err));
+            opportunity.save((saveError, opportunity) => {
+                if (saveError) {
+                    return reply({errors: saveError.errors}).code(400);
                 }
-                return reply(opportunity);
+                let result = jsonApi.mongoosetoJsonApiObject(opportunity, 'opportunity');
+                return reply({data: result});
             });
         });
     },
@@ -63,7 +77,7 @@ module.exports = {
             if (err) {
                 return reply(new Error(err));
             }
-            return replay();
+            return reply().code(204)
         });
     }
 };

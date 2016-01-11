@@ -2,7 +2,8 @@
 
 const opportunitiesController = require('../controllers/opportunities');
 
-module.exports = (server) => {
+module.exports.register = function(server, options, next) {
+
     server.route({
         method: 'GET',
         path: '/opportunities',
@@ -22,7 +23,7 @@ module.exports = (server) => {
     });
 
     server.route({
-        method: 'PUT',
+        method: 'PATCH',
         path: '/opportunities/{id}',
         handler: opportunitiesController.update
     });
@@ -32,4 +33,10 @@ module.exports = (server) => {
         path: '/opportunities/{id}',
         handler: opportunitiesController.destroy
     });
+    next();
+};
+
+module.exports.register.attributes = {
+    name: 'opportunities',
+    version: '0.0.0'
 };

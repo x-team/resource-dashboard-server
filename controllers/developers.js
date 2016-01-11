@@ -1,10 +1,15 @@
 'use strict';
-
+const jsonApi = require('../helpers/jsonApi.js');
 const Developer = require('../models/developer');
 
 module.exports = {
     index(request, reply) {
-        return reply(Developer.find());
+        Developer.find({}, (err, developers) => {
+            developers = developers.map((developer) => {
+                return jsonApi.mongoosetoJsonApiObject(developer, 'developer');
+            });
+            reply({data: developers});
+        });
     },
 
     show(request, reply) {
