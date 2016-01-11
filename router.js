@@ -10,6 +10,11 @@ module.exports = (server) => {
     routes.forEach(function(route) {
         server.register({register: route}, {
             routes: { prefix: '/api'}
-        }, ()=>{});
+        }, (err)=>{
+            if(err) {
+                //TODO: log when we have a logging system
+                console.error('Failed to init internal routes: ', err);
+            }
+        });
     });
 }
