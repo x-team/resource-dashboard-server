@@ -28,11 +28,16 @@ module.exports = {
                 console.log('\tGoogle Token Valid');
                 body = JSON.parse(body);
                 let userId = body.user_id;
-                let userEmail = body.email;
-                return reply({token: generateToken(userId), email: userEmail});
+                let email = body.email.toLowerCase();
+                User.findOne({email}, function(err, user) {
+                    if(err || !user) {
+                        return reply({error: 'Account is not authorized'}).code(400);
+                    }
+                    return reply({token: generateToken(userId), email});
+                });
             } else {
                 console.log('\tFailed to validate Google Token');
-                return reply().code(401);
+                return reply().code(400);
             }
         });
 
