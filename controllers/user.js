@@ -5,10 +5,10 @@ const jwt = require('jsonwebtoken');
 const validateJWT = require('hapi-auth-jwt');
 const request = require('request');
 
-let generateToken = function(userId) {
+let generateToken = function(email) {
     return jwt.sign(
         // payload
-        { userId: userId },
+        { email },
         // secret
         process.env.TOKEN_SECRET,
         // options
@@ -33,7 +33,7 @@ module.exports = {
                     if(err || !user) {
                         return reply({error: 'Account is not authorized'}).code(400);
                     }
-                    return reply({token: generateToken(userId), email});
+                    return reply({token: generateToken(email), email});
                 });
             } else {
                 console.log('\tFailed to validate Google Token');

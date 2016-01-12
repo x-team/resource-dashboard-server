@@ -6,31 +6,36 @@ module.exports.register = function(server, options, next) {
     server.route({
         method: 'GET',
         path: '/developers',
-        handler: developersController.index
+        handler: developersController.index,
+        config: {auth: 'token'}
     });
 
     server.route({
         method: 'GET',
         path: '/developers/{id}',
-        handler: developersController.show
+        handler: developersController.show,
+        config: {auth: 'token'}
     });
 
     server.route({
         method: 'POST',
         path: '/developers',
-        handler: developersController.create
+        handler: developersController.create,
+        config: {auth: 'token'}
     });
 
     server.route({
         method: 'PATCH',
         path: '/developers/{id}',
-        handler: developersController.update
+        handler: developersController.update,
+        config: {auth: 'token'}
     });
 
     server.route({
         method: 'DELETE',
         path: '/developers/{id}',
-        handler: developersController.destroy
+        handler: developersController.destroy,
+        config: {auth: 'token'}
     });
     next();
 };
