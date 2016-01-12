@@ -23,6 +23,7 @@
   "homepage": "https://github.com/x-team/resource-dashboard-server#readme",
   "dependencies": {
     "decamelize": "^1.1.2",
+    "dotenv": "^1.2.0",
     "glob": "^6.0.1",
     "hapi": "^11.1.2",
     "hapi-auth-jwt": "^4.0.0",
