@@ -43,7 +43,7 @@ module.exports = {
         if(id === currentUserId) {
             let errors = {
                 email: {
-                    message: 'Current user can\'t be deleted'
+                    message: 'You can\'t delete yourself'
                 }
             };
             return reply({errors}).code(400);
@@ -59,10 +59,15 @@ module.exports = {
 
     getToken(req, reply) {
         let googleToken = req.payload.password;
-        // send token to Google for validation
-        request('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + googleToken, function (error, response, body) {
+
+        let googleUrl = { url: 'https://www.googleapis.com/oauth2/v1/tokeninfo', qs: {access_token: googleToken}};
+        request(googleUrl, function (error, response, body) {
             if (!error && response.statusCode == 200) {
-                body = JSON.parse(body);
+                try {
+                    body = JSON.parse(body);
+                } catch (e) {
+                    return reply({error: 'Problem happened while processing your request'}).code(500);
+                }
                 let userId = body.user_id;
                 let email = body.email.toLowerCase();
                 User.findOne({email}, function(err, user) {
@@ -81,11 +86,8 @@ module.exports = {
 
 let generateToken = function(id, email) {
     return jwt.sign(
-        // payload
-        { email, id},
-        // secret
+        {id, email},
         process.env.TOKEN_SECRET,
-        // options
         { expiresIn: 10000 }
     );
 };
