@@ -23,13 +23,18 @@
   "homepage": "https://github.com/x-team/resource-dashboard-server#readme",
   "dependencies": {
     "decamelize": "^1.1.2",
+    "dotenv": "^1.2.0",
     "glob": "^6.0.1",
     "hapi": "^11.1.2",
+    "hapi-auth-jwt": "^4.0.0",
+    "jsonwebtoken": "^5.5.4",
     "kerberos": "0.0.17",
     "mongodb": "^2.0.49",
     "mongoose": "^4.2.8",
     "mongoose-timestamp": "^0.4.0",
-    "request": "^2.67.0"
+    "mongoose-unique-validator": "^0.6.2",
+    "request": "^2.67.0",
+    "validator": "^4.5.0"
   },
   "pre-commit": [
     "lint",

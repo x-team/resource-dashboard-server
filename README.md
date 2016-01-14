@@ -18,6 +18,12 @@ You will need the following things properly installed on your computer.
 * change into the new directory
 * `npm install`
 
+
+* create `.env` and add the following
+```
+TOKEN_SECRET=random_secret
+```
+
 ## Running / Development
 
 * `mongod` # Run MongoDB
