@@ -11,6 +11,8 @@ const OpportunitySchema = new Schema({
         type: String,
         required: 'Name is required'
     },
+
+
     skills: Array
 }, {
     toObject: {
