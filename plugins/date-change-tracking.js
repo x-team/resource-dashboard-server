@@ -19,12 +19,7 @@ module.exports = function lastModifiedPlugin (schema, options) {
 
         schema.virtual(fieldObj.field)
             .get(function() {
-                let historyField = this[historyLocation];
-                let lastUpdated = _.sortBy(historyField, 'version').pop();
-                if(!lastUpdated) {
-                    return null;
-                }
-                return lastUpdated.value;
+                return _.chain(this[historyLocation]).sortBy('version').last().get('value').value() || null;
             })
             .set(function(val) {
                 //validation checkings
@@ -44,14 +39,13 @@ module.exports = function lastModifiedPlugin (schema, options) {
                     value: null
                 };
 
-                let valueRemainedEmpty = val === null && lastUpdated.value === null;
-                let valueDidntChange = moment(val).isSame(lastUpdated.value, 'day');
-                if(valueRemainedEmpty || valueDidntChange) {
+                let dateRemainedEmpty = val === null && lastUpdated.value === null;
+                let dateDidntChange = moment(val).isSame(lastUpdated.value, 'day');
+                if(dateRemainedEmpty || dateDidntChange) {
                     return;
                 }
-                let newVersionNumber = lastUpdated.version + 1;
                 historyField.push({
-                    version: newVersionNumber,
+                    version: lastUpdated.version + 1,
                     created_at: new Date(),
                     value: val
                 });
