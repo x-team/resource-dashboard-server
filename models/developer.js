@@ -16,7 +16,7 @@ const DeveloperSchema = new Schema({
     address: String,
     location: String,
     timezone: String,
-    rate: String,
+    rate: Number,
     skills: Array
 }, {
     toObject: {
@@ -25,7 +25,7 @@ const DeveloperSchema = new Schema({
 });
 
 DeveloperSchema.plugin(DateChangeTrackingPlugin, {
-    field: 'availableDate'
+    fields: [{field: 'availableDate'}]
 });
 
 Object.assign(DeveloperSchema.methods, {

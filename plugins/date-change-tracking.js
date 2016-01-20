@@ -12,31 +12,41 @@ const ChangeTrackDateSchema = new Schema({
 });
 
 module.exports = function lastModifiedPlugin (schema, options) {
-    let historyLocation = `${options.field}History`
-    schema.add({[historyLocation]: [ChangeTrackDateSchema]});
-    schema.virtual(options.field)
-    .get(function() {
-        let lastUpdated = _.sortBy(this.availableDateHistory, 'version').pop();
-        if(!lastUpdated) {
-            return null;
-        }
-        return lastUpdated.value;
-    })
-    .set(function(val) {
-        let lastUpdated = _.sortBy(this.availableDateHistory, 'version').pop() || {
-            version: 0,
-            value: null
-        };
-        let valueRemainedEmpty = val === null && lastUpdated.value === null;
-        let valueDidntChange = moment(val).isSame(lastUpdated.value, 'day');
-        if(valueRemainedEmpty || valueDidntChange) {
-            return;
-        }
-        let newVersionNumber = lastUpdated.version + 1;
-        this.availableDateHistory.push({
-            version: newVersionNumber,
-            created_at: new Date(),
-            value: val
-        });
+    options.fields.forEach((fieldObj)=> {
+
+        let historyLocation = `${fieldObj.field}History`
+        schema.add({[historyLocation]: [ChangeTrackDateSchema]});
+
+        schema.virtual(fieldObj.field)
+            .get(function() {
+                let historyField = this[historyLocation];
+                let lastUpdated = _.sortBy(historyField, 'version').pop();
+                if(!lastUpdated) {
+                    return null;
+                }
+                return lastUpdated.value;
+            })
+            .set(function(val) {
+                if(!val && fieldObj.required) {
+                    return this.invalidate(fieldObj.field, fieldObj.required);
+                }
+                let historyField = this[historyLocation];
+                let lastUpdated = _.sortBy(historyField, 'version').pop() || {
+                    version: 0,
+                    value: null
+                };
+                let valueRemainedEmpty = val === null && lastUpdated.value === null;
+                let valueDidntChange = moment(val).isSame(lastUpdated.value, 'day');
+                if(valueRemainedEmpty || valueDidntChange) {
+                    return;
+                }
+                let newVersionNumber = lastUpdated.version + 1;
+                historyField.push({
+                    version: newVersionNumber,
+                    created_at: new Date(),
+                    value: val
+                });
+            });
+
     });
 };
