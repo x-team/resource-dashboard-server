@@ -27,14 +27,23 @@ module.exports = function lastModifiedPlugin (schema, options) {
                 return lastUpdated.value;
             })
             .set(function(val) {
+                //validation checkings
                 if(!val && fieldObj.required) {
                     return this.invalidate(fieldObj.field, fieldObj.required);
                 }
+                if(fieldObj.validate) {
+                    let validate = fieldObj.validate[0];
+                    if(!validate.apply(this, [val])) {
+                        return this.invalidate(fieldObj.field, fieldObj.validate[1]);
+                    }
+                }
+
                 let historyField = this[historyLocation];
                 let lastUpdated = _.sortBy(historyField, 'version').pop() || {
                     version: 0,
                     value: null
                 };
+
                 let valueRemainedEmpty = val === null && lastUpdated.value === null;
                 let valueDidntChange = moment(val).isSame(lastUpdated.value, 'day');
                 if(valueRemainedEmpty || valueDidntChange) {
