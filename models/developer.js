@@ -2,11 +2,10 @@
 
 const request = require('request');
 const mongoose = require('mongoose');
+const DateChangeTrackingPlugin = require('../plugins/date-change-tracking');
 const Schema = mongoose.Schema;
 
 const DeveloperSchema = new Schema({
-    available: Boolean,
-    availableDate: Date,
     name: String,
     firstName: String,
     lastName: String,
@@ -17,8 +16,16 @@ const DeveloperSchema = new Schema({
     address: String,
     location: String,
     timezone: String,
-    rate: String,
+    rate: Number,
     skills: Array
+}, {
+    toObject: {
+        virtuals: true
+    }
+});
+
+DeveloperSchema.plugin(DateChangeTrackingPlugin, {
+    fields: [{field: 'availableDate'}]
 });
 
 Object.assign(DeveloperSchema.methods, {

@@ -33,8 +33,8 @@ module.exports = {
         let data = request.payload.data.attributes;
         Opportunity.create({
             name: data.name,
-            dateFrom: data.dateFrom,
-            dateTo: data.dateTo,
+            dateFrom: data['date-from'],
+            dateTo: data['date-to'],
             skills: data.skills
         }, (err, opportunity) => {
             if (err) {
@@ -55,8 +55,8 @@ module.exports = {
             }
             Object.assign(opportunity, {
                 name: data.name,
-                dateFrom: data['date-from'],
                 dateTo: data['date-to'],
+                dateFrom: data['date-from'],
                 skills: data.skills
             });
 

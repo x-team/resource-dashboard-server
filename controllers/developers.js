@@ -49,34 +49,26 @@ module.exports = {
 
     update(request, reply) {
         let id = encodeURIComponent(request.params.id);
+        let data = request.payload.data.attributes;
 
         Developer.findById(id, (err, developer) => {
             if (err) {
-                return reply(new Error(err));
+                return reply(err).code(400);
             }
 
             Object.assign(developer, {
-                available: request.payload.available,
-                availableDate: request.payload.availableDate,
-                name: request.payload.name,
-                firstName: request.payload.firstName,
-                lastName: request.payload.lastName,
-                createdAt: request.payload.createdAt,
-                updatedAt: request.payload.updatedAt,
-                profileUrl: request.payload.profileUrl,
-                imageUrl: request.payload.imageUrl,
-                address: request.payload.address,
-                location: request.payload.location,
-                timezone: request.payload.timezone,
-                rate: request.payload.rate,
-                skills: request.payload.skills
+                availableDate: data['available-date'],
+                rate: data.rate
             });
 
-            developer.save((err, developer) => {
-                if (err) {
-                    return reply(new Error(err));
+            developer.save((saveError, developer) => {
+                if (saveError) {
+                    return reply({errors: saveError.errors}).code(400);
                 }
-                return reply(developer);
+
+                let result = jsonApi.mongoosetoJsonApiObject(developer, 'developer');
+                return reply({data: result});
+
             });
         });
     },

@@ -29,6 +29,8 @@
     "hapi-auth-jwt": "^4.0.0",
     "jsonwebtoken": "^5.5.4",
     "kerberos": "0.0.17",
+    "lodash": "^4.0.0",
+    "moment": "^2.11.1",
     "mongodb": "^2.0.49",
     "mongoose": "^4.2.8",
     "mongoose-timestamp": "^0.4.0",
