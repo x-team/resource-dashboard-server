@@ -12,18 +12,28 @@ module.exports = {
 
             let months = getMonths();
 
-            let available= months.map((month) => {
+            let available = months.map((month) => {
                 let monthToCompare = moment(month);
                 let availableDevelopers = result.developers.filter((developer) => {
-                    return developer.available || monthToCompare.isAfter(developer.availableDate, 'month');
+                    let availableDate = developer.getDateRecordFromHistory('availableDate', month);
+                    if(!availableDate) {
+                        return false;
+                    }
+                    availableDate = availableDate.value;
+                    return !availableDate || monthToCompare.isAfter(availableDate, 'month');
                 });
                 return availableDevelopers.length;
             });
 
-            let booked= months.map((month) => {
+            let booked = months.map((month) => {
                 let monthToCompare = moment(month);
                 let bookedDevelopers = result.developers.filter((developer) => {
-                    return !developer.available && monthToCompare.isSameOrBefore(developer.availableDate, 'month');
+                    let availableDate = developer.getDateRecordFromHistory('availableDate', month);
+                    if(!availableDate) {
+                        return false;
+                    }
+                    availableDate = availableDate.value;
+                    return availableDate && monthToCompare.isSameOrBefore(availableDate, 'month');
                 });
                 return bookedDevelopers.length;
             });
@@ -31,7 +41,14 @@ module.exports = {
             let needed = months.map((month) => {
                 let monthToCompare = moment(month);
                 let availableOpportunities = result.opportunities.filter((opportunity) => {
-                    return monthToCompare.isSameOrAfter(opportunity.dateFrom, 'month') && monthToCompare.isSameOrBefore(opportunity.dateTo, 'month');
+                    let dateFrom = opportunity.getDateRecordFromHistory('dateFrom', month);
+                    let dateTo = opportunity.getDateRecordFromHistory('dateTo', month);
+                    if(!dateFrom || !dateTo) {
+                        return false;
+                    }
+                    dateFrom = dateFrom.value;
+                    dateTo = dateTo.value;
+                    return monthToCompare.isSameOrAfter(dateFrom, 'month') && monthToCompare.isSameOrBefore(dateTo, 'month');
                 });
                 return availableOpportunities.length;
             });
