@@ -12,6 +12,13 @@ const ChangeTrackDateSchema = new Schema({
 });
 
 module.exports = function lastModifiedPlugin (schema, options) {
+
+    schema.methods.getDateRecordFromHistory = function(type, dateToCompare) {
+        dateToCompare = moment(dateToCompare);
+        let historyLocation = this[`${type}History`];
+        return _.chain(historyLocation).filter(x => dateToCompare.isSameOrAfter(x.created_at, 'month')).sortBy('version').last().value();
+    };
+
     options.fields.forEach((fieldObj)=> {
 
         let historyLocation = `${fieldObj.field}History`

@@ -25,3 +25,5 @@ mongoose.connection.once('open', () => {
         console.log('Server running at:', server.info.uri);
     });
 });
+
+module.exports = server;

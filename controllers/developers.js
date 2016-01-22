@@ -25,7 +25,6 @@ module.exports = {
 
     create(request, reply) {
         Developer.create({
-            available: request.payload.available,
             availableDate: request.payload.availableDate,
             name: request.payload.name,
             firstName: request.payload.firstName,
