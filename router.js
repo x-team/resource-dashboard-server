@@ -12,7 +12,7 @@ module.exports = (server) => {
     server.register(hapiAuthJwt, function(error) {
         server.auth.strategy('token', 'jwt', {
             key: process.env.TOKEN_SECRET,
-            validateFun: validateUserToken
+            validateFunc: validateUserToken
         });
 
         routes.forEach(function(route) {
