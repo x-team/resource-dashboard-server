@@ -1,23 +1,30 @@
 'use strict';
+
 require('dotenv').config({silent: true});
+const config = require('./config');
 
 const Hapi = require('hapi');
 const mongoose = require('mongoose');
-const config = require('./config');
+
+const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : config.server.host;
+const port = process.env.PORT || config.server.port;
+const mongodbUri = process.env.MONGOLAB_URI || config.database.uri;
 
 const server = new Hapi.Server();
-const router = require('./router');
-
 server.connection({
-    host: config.server.host,
-    port: config.server.port
+    host,
+    port,
+    routes: {
+        cors: true
+    }
 });
 
-router(server);
+require('./router')(server);
 
-mongoose.connect(config.database.uri);
+mongoose.connect(mongodbUri);
 mongoose.connection.on('error', console.error.bind(console, 'DB connection error:'));
 mongoose.connection.once('open', () => {
+    console.log('Connected to database at:', mongodbUri);
     server.start((err) => {
         if (err) {
             throw err;

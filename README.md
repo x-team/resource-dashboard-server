@@ -24,12 +24,26 @@ You will need the following things properly installed on your computer.
 TOKEN_SECRET=random_secret
 ```
 
-## Running / Development
+## Development
 
 * `mongod` # Run MongoDB
 * `node index.js` # Run static server or
 * `node run dev` # Run watch server
 * Visit your app at [http://localhost:8000](http://localhost:8000).
+
+### Deploying
+
+- Install [Heroku Toolbelt](https://toolbelt.heroku.com/) and log in to your account.
+- Turn on Mongolab Add-on in Heroku Dashboard for your app
+
+Follow steps below to deploy:
+```
+$ heroku git:remote -a <heroku-app-name>
+$ heroku config:set TOKEN_SECRET=<random-token-string>
+$ git push heroku master
+$ heroku ps:scale web=1
+$ heroku open
+```
 
 ### Running Tools
 

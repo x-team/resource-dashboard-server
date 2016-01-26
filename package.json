@@ -9,7 +9,7 @@
     "coverage": "rm -rf coverage && istanbul cover -- tape test/index.js --verbose",
     "lint": "eslint .",
     "validate": "npm ls",
-    "postinstall": "rm .jshintrc .jshintignore"
+    "postinstall": "rm -f .jshintrc .jshintignore"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
     "mongoose": "^4.2.8",
     "mongoose-timestamp": "^0.4.0",
     "mongoose-unique-validator": "^0.6.2",
+    "pm2": "^1.0.0",
     "request": "^2.67.0",
     "validator": "^4.5.0"
   },
@@ -53,6 +54,6 @@
     "tape": "^4.2.2"
   },
   "engines": {
-    "node": ">=5.0.0"
+    "node": "5.X"
   }
 }
