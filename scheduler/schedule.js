@@ -10,31 +10,41 @@ const _ = require('lodash');
 const config = require('../config');
 const Developer = require('../models/developer');
 
+const subdomain = process.env.WORKABLE_ACCOUNT_SUBDOMAIN;
+const job = process.env.WORKABLE_JOB_SHORTCODE;
+const token = process.env.WORKABLE_TOKEN;
+
 mongoose.connect(config.database.uri);
 mongoose.connection.on('error', console.error.bind(console, 'DB connection error:'));
 
-console.log('Scheduler Started & will run every hour');
-
-var scheduler = schedule.scheduleJob('0 0 * * * *', ()=> {
-    getWorkableData().then((workableDevelopers)=> {
-        Developer.find({}, (error, developers)=> {
-            checkWhatNeedsToBeDone(developers, workableDevelopers).then((todo)=> {
-                console.log('Data To Process: ',todo);
-                deleteDevelopers(todo.developersToDelete);
-                createDevelopers(todo.developersToAdd);
-                editDevelopers(todo.developersToEdit, developers);
+mongoose.connection.once('open', () => {
+    console.log('Scheduler Started & will run every hour');
+    schedule.scheduleJob('0 0 * * * *', ()=> {
+        getWorkableData().then((workableDevelopers)=> {
+            Developer.find((error, developers)=> {
+                checkWhatNeedsToBeDone(developers, workableDevelopers).then((todo)=> {
+                    console.log(todo);
+                    console.log('Data To Process: ',todo);
+                    if(todo.developersToDelete.length) {
+                        deleteDevelopers(todo.developersToDelete);
+                    }
+                    if(todo.developersToAdd.length) {
+                        createDevelopers(todo.developersToAdd);
+                    }
+                    if(todo.developersToEdit.length) {
+                        editDevelopers(todo.developersToEdit, developers);
+                    }
+                });
             });
+        },(err)=> {
+            console.log(err);
         });
-    },(err)=> {
-        console.log(err);
     });
 });
 
+
 var deleteDevelopers = (developers)=> {
     let ids = _.map(developers, '_id');
-    if(!ids.length) {
-        return;
-    }
     Developer.remove({_id: {$in: ids}}, (err)=> {
         if(err) {
             console.error('ERROR while deleting existing developers ', err);
@@ -46,10 +56,6 @@ var deleteDevelopers = (developers)=> {
 };
 
 var editDevelopers = (updatedDevelopersWorkable, allLocalDevelopers)=> {
-    if(!updatedDevelopersWorkable.length) {
-        return;
-    }
-
     //async seq for loop
     let prevPromise = Promise.resolve();
     updatedDevelopersWorkable.forEach((workableDeveloper)=> {
@@ -68,15 +74,17 @@ var editDevelopers = (updatedDevelopersWorkable, allLocalDevelopers)=> {
 
 var editDeveloper = (developerToBeUpdated, workableDeveloper)=> {
     return new Promise((resolve) => {
-        developerToBeUpdated.name = workableDeveloper.name;
-        developerToBeUpdated.firstName = workableDeveloper.firstname;
-        developerToBeUpdated.lastName = workableDeveloper.lastname;
-        developerToBeUpdated.imageUrl = workableDeveloper.image_url;
-        developerToBeUpdated.profileUrl = workableDeveloper.profile_url;
-        developerToBeUpdated.skills = workableDeveloper.tags;
-        developerToBeUpdated.address = workableDeveloper.address;
-        developerToBeUpdated.createdAt = workableDeveloper.created_at;
-        developerToBeUpdated.updatedAt = workableDeveloper.updated_at;
+        _.assign(developerToBeUpdated, {
+            name: workableDeveloper.name,
+            firstName: workableDeveloper.firstname,
+            lastName: workableDeveloper.lastname,
+            imageUrl: workableDeveloper.image_url,
+            profileUrl: workableDeveloper.profile_url,
+            skills: workableDeveloper.tags,
+            address: workableDeveloper.address,
+            createdAt: workableDeveloper.created_at,
+            updatedAt: workableDeveloper.updated_at,
+        });
 
         developerToBeUpdated.save((err)=> {
             if(err) {
@@ -90,10 +98,6 @@ var editDeveloper = (developerToBeUpdated, workableDeveloper)=> {
 
 
 var createDevelopers = (developers)=> {
-    if(!developers.length) {
-        return;
-    }
-
     let developersToInsert = _.map(developers, (workableDeveloper)=> {
         return {
             name: workableDeveloper.name,
@@ -141,9 +145,9 @@ var checkWhatNeedsToBeDone = (localDevelopers, workableDevelopers)=> {
         return !found;
     });
 
-    developersToAdd = getDetailedWorkableData(developersToAdd);
-    developersToEdit = getDetailedWorkableData(developersToEdit);
-    return Promise.all([developersToAdd, developersToEdit, developersToDelete]).then((result) => {
+    let detailedDevelopersToAdd = getDetailedWorkableData(developersToAdd);
+    let detailedDevelopersToEdit = getDetailedWorkableData(developersToEdit);
+    return Promise.all([detailedDevelopersToAdd ,detailedDevelopersToEdit, developersToDelete]).then((result) => {
         return {
             developersToAdd: result[0],
             developersToEdit: result[1],
@@ -154,18 +158,12 @@ var checkWhatNeedsToBeDone = (localDevelopers, workableDevelopers)=> {
 };
 
 var getDetailedWorkableData = (workableDevelopers)=> {
-    let result = [];
-    workableDevelopers.forEach((workableDeveloper)=> {
-        result.push(loadWorkableRecord(workableDeveloper.id));
-    });
-    return Promise.all(result);
+    return Promise.all(workableDevelopers.map((workableDeveloper) => {
+        return loadWorkableRecord(workableDeveloper.id);
+    }));
 };
 
 var loadWorkableRecord = (id)=> {
-    let subdomain = process.env.WORKABLE_ACCOUNT_SUBDOMAIN;
-    let job = process.env.WORKABLE_JOB_SHORTCODE;
-    let token = process.env.WORKABLE_TOKEN;
-
     return new Promise((resolve, reject) => {
         request.get({
             url: `https://www.workable.com/spi/v3/accounts/${subdomain}/jobs/${job}/candidates/${id}`,
@@ -182,10 +180,6 @@ var loadWorkableRecord = (id)=> {
 };
 
 var getWorkableData = ()=> {
-    let subdomain = process.env.WORKABLE_ACCOUNT_SUBDOMAIN;
-    let job = process.env.WORKABLE_JOB_SHORTCODE;
-    let token = process.env.WORKABLE_TOKEN;
-
     return new Promise((resolve, reject) => {
         request.get({
             url: `https://www.workable.com/spi/v3/accounts/${subdomain}/jobs/${job}/candidates`,
