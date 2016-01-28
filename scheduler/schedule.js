@@ -23,7 +23,6 @@ mongoose.connection.once('open', () => {
         getWorkableData().then((workableDevelopers)=> {
             Developer.find((error, developers)=> {
                 checkWhatNeedsToBeDone(developers, workableDevelopers).then((todo)=> {
-                    console.log(todo);
                     console.log('Data To Process: ',todo);
                     if(todo.developersToDelete.length) {
                         deleteDevelopers(todo.developersToDelete);
