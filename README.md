@@ -50,3 +50,26 @@ $ heroku open
 * `npm run test` # Run tests
 * `npm run coverage` # Run code coverage
 * `npm run lint` # Run code linter
+
+### Workable Scheduler
+
+
+#### Env Variables
+* generate a token from `workable`
+* Add the following env variables
+
+```
+WORKABLE_TOKEN=TOKEN
+WORKABLE_JOB_SHORTCODE=JOBSHORTCODE
+WORKABLE_ACCOUNT_SUBDOMAIN=SUBDOMAIN
+```
+
+*Get Workable Token?*
+Go to `Account Dropdown` -> `Integeration` -> `Generate Token`
+
+*Get Wokrable Job Shortcode that all candidates are related to?*
+Go to Job Details -> There is a `job shortlink` text, the shortcode is the ID in that text
+Ex:`https://xteam.workable.com/j/3D150E9D22`, `shortcode` equals `3D150E9D22`
+
+*Get Wokrable account subdomain?*
+if url is `https://xteam.workable.com` then `subdomain` is `xteam`

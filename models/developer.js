@@ -17,7 +17,8 @@ const DeveloperSchema = new Schema({
     location: String,
     timezone: String,
     rate: Number,
-    skills: Array
+    skills: Array,
+    workableId: String
 }, {
     toObject: {
         virtuals: true
