@@ -45,6 +45,14 @@ $ heroku ps:scale web=1
 $ heroku open
 ```
 
+### Adding initial user
+
+```
+$ mongod
+$ use resource-dashboard-dev
+$ db.users.insert({ "name": "John Doe", "email": "john.doe@example.com" })
+```
+
 ### Running Tools
 
 * `npm run test` # Run tests
