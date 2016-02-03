@@ -47,8 +47,10 @@ $ heroku open
 
 ### Adding initial user
 
+In order to do that, make sure that you are running MongoDB and it's deamon in attached (`$ mongod`).
+
 ```
-$ mongod
+$ mongo
 $ use resource-dashboard-dev
 $ db.users.insert({ "name": "John Doe", "email": "john.doe@example.com" })
 ```
