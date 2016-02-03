@@ -77,9 +77,9 @@ WORKABLE_ACCOUNT_SUBDOMAIN=SUBDOMAIN
 *Get Workable Token?*
 Go to `Account Dropdown` -> `Integeration` -> `Generate Token`
 
-*Get Wokrable Job Shortcode that all candidates are related to?*
+*Get Workable Job Shortcode that all candidates are related to?*
 Go to Job Details -> There is a `job shortlink` text, the shortcode is the ID in that text
 Ex:`https://xteam.workable.com/j/3D150E9D22`, `shortcode` equals `3D150E9D22`
 
-*Get Wokrable account subdomain?*
+*Get Workable account subdomain?*
 if url is `https://xteam.workable.com` then `subdomain` is `xteam`
