@@ -83,3 +83,5 @@ Ex:`https://xteam.workable.com/j/3D150E9D22`, `shortcode` equals `3D150E9D22`
 
 *Get Workable account subdomain?*
 if url is `https://xteam.workable.com` then `subdomain` is `xteam`
+
+Maintained by the [developers at x-team](https://www.x-team.com) | [developer blog](https://www.x-team.com/blog/)
